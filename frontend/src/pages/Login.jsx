@@ -17,7 +17,6 @@ export default function Login() {
   const from = location.state?.from?.pathname || '/'
 
   useEffect(() => {
-    // Garante que, se houver background específico de login, ele seja usado
     if (backgrounds.login) {
       setBackground('login')
     }
@@ -27,6 +26,7 @@ export default function Login() {
     e.preventDefault()
     setError(null)
     setLoading(true)
+
     try {
       await login(email, password)
       navigate(from, { replace: true })
@@ -39,22 +39,20 @@ export default function Login() {
   }
 
   const handleGetStart = () => {
-    // Aqui no futuro a gente pode abrir um modal, registrar pedido no Firestore, etc.
-    // Por enquanto é só um botão "cenográfico" indicando que o acesso é controlado pelo admin.
     alert('Contate o admin para liberação do acesso: código 1004.')
   }
 
   return (
     <div className="login-wrapper">
-      {/* LADO ESQUERDO - LOGIN + GET START */}
+      {/* ESQUERDA */}
       <div className="login-left">
         <div className="login-card">
           <h1>⚓ Projeto Oiapoque</h1>
           <p className="login-subtitle">
-            Ambiente operacional - acesso restrito
+            Ambiente operacional — acesso restrito
           </p>
 
-          {/* BLOCO GET START */}
+          {/* GET START */}
           <div className="getstart-card">
             <h2>Get Start</h2>
             <p className="getstart-text">
@@ -67,16 +65,50 @@ export default function Login() {
             >
               Solicitar acesso
             </button>
-            <p className="getstart-warning">
-              Contate o admin para liberação do acesso!
-            </p>
-            <p className="getstart-code">
-              1004
-            </p>
+            <p className="getstart-warning">Contate o admin para liberação do acesso!</p>
+            <p className="getstart-code">1004</p>
           </div>
 
-          {/* FORMULÁRIO DE LOGIN */}
+          {/* FORM DE LOGIN */}
           <form onSubmit={handleSubmit} className="login-form">
-            <label>
-              E-mail
 
+            <label>
+              E-mail:
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </label>
+
+            <label>
+              Senha:
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </label>
+
+            {error && <p className="error-message">{error}</p>}
+
+            <button
+              type="submit"
+              className="btn-primary login-button"
+              disabled={loading}
+            >
+              {loading ? 'Entrando...' : 'Entrar'}
+            </button>
+          </form>
+        </div>
+      </div>
+
+      {/* DIREITA - IMAGEM */}
+      <div className="login-right">
+        <img src={loginImage} alt="Login" className="login-image" />
+      </div>
+    </div>
+  )
+}
